@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add a new User</title>
+        <style type="text/css">
+            .error {color: red}
+        </style>
+    </head>
+    <body>
+        <h1>Add a new User</h2>
+        <form action="/new_user" method="POST">
+            <table border="0">
+                <tr>
+                    <td>Username:</td>
+                    <td><input type="text" name="username" value="{{username}}"><br></td>
+                    <td class="error">{{error}}</td>
+                </tr>
+                <tr>
+                    <td>Password:</td>
+                    <td><input type="password" name="password"><br></td>
+                </tr>
+                <tr>
+                    <td>E-mail (optional):</td>
+                    <td><input type="text" name="email"><br></td>
+                </tr>
+                <tr>
+                    <td>Is Admin?</td>
+                    <td><input type="checkbox" name="is_admin"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Submit"></td>
+                </tr>
+            </table>
+        </form>
+        <a href="/">Main Page</a>
+    </body>
+</html>

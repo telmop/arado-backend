@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Add new Ad</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .error {color: red}
+    </style>
+    <script>
+        var map;
+        var lastMarker;
+        var update_timeout = null;
+        function initMap() {
+            google.maps.event.trigger(map, 'resize')
+            // Center Map around Lisbon
+            var myLatlng = new google.maps.LatLng(38.736946, -9.142685);
+            var myOptions = {
+                zoom: 12,
+                center: myLatlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                fullscreenControl: false,
+                mapTypeControl: false,
+                streetViewControl: false
+            }
+            // Get map object
+            map = new google.maps.Map(document.getElementById("map"), myOptions);
+    
+            // Adds marker when user clicks
+            google.maps.event.addListener(map, 'click', function(event) {
+                update_timeout = setTimeout(function() {
+                    placeMarker(event.latLng);
+                }, 200);
+            });
+    
+            // Distinguishes click and double click
+            google.maps.event.addListener(map, 'dblclick', function(event) {       
+                clearTimeout(update_timeout);
+            });
+        }
+    
+        // Place the marker
+        function placeMarker(location) {
+            if (lastMarker) {  // Delete previous marker
+                lastMarker.setMap(null);
+            }
+            lastMarker = new google.maps.Marker({
+                position: location, 
+                map: map
+            });
+            //map.setCenter(location);
+        }
+        function fill_coords() {
+            document.getElementsByName('latitude')[0].value=lastMarker.position.lat();
+            document.getElementsByName('longitude')[0].value=lastMarker.position.lng();
+        }
+    </script>
+
+  </head>
+  <body>
+      <h2>Create a new advertisement</h2>
+      <form method="POST">
+          <table border="0">
+            <tr>
+                <td>Advertisement name:</td>
+                <td><input type="text" name="ad_name" placeholder="Campaign name"><br></td>
+            </tr>
+            <tr>
+                <td>Advertiser:</td>
+                <td>
+                    <select name="client_name">
+                        {% for client in clients %}
+                            <option value="{{client.name}}">{{client.name}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Advertisement category:</td>
+                <td>
+                    <select name="ad_category">
+                        <option value="restaurant">Restaurant</option>
+                        <option value="hotel">Hotel</option>
+                        <option value="shop">Shop</option>
+                        <option value="leisure">Leisure</option>
+                        <option value="other">Other</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Advertisement type:</td>
+                <td>
+                    <select name="ad_type">
+                        <option value="3dmodel">3D Model</option>
+                        <option value="image">Image</option>
+                        <option value="video">Video</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Advertisement location: <br> (click on the map)</td>
+                <td><div id="map" style="width:300px; height:300px"></div></td>
+                <td><input type="hidden" name="latitude"></td>
+                <td><input type="hidden" name="longitude"></td>
+                <td class="error">{{error}}</td>
+            </tr>
+            <tr>
+                <td>Advertisement height:</td>
+                <td><input type="number" name="ad_height" value="0" min="0" max="500"> m</td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Submit" onclick="fill_coords()"></td>
+            </tr>
+          </table>
+      </form>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8KInU15m1wIIH19tXNWpbC7KJLKgj2uM&callback=initMap" async defer></script>
+      <a href="/">Main Page</a>
+    </body>
+</html>

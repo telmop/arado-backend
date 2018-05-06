@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add a new Client</title>
+        <style type="text/css">
+            .error {color: red}
+        </style>
+    </head>
+    <body>
+        <h1>Add a new Client</h2>
+        <form action="/new_client" method="POST">
+            <table border="0">
+                <tr>
+                    <td>Client name:</td>
+                    <td><input type="text" name="client_name" placeholder="Client name" value="{{client_name}}"><br></td>
+                    <td class="error">{{error}}</td>
+                </tr>
+                <tr>
+                    <td>Client type:</td>
+                    <td>
+                        <select name="client_type">
+                                <option value="paid">Paid</option>
+                                <option value="trial">Trial</option>
+                                <option value="demo">Demo</option>
+                        </select><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Submit"></td>
+                </tr>
+            </table>
+        </form>
+        <a href="/">Main Page</a>
+    </body>
+</html>

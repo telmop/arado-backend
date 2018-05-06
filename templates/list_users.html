@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>List of Users</title>
+    </head>
+    <body>
+        <h1>List of Users</h1>
+        <table style="border-spacing: 1.5em">
+            <tr>
+                <th>ID</th>
+                <th>Username</th> 
+                <th>API Key</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+                <td>{{user.id}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.api_key}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="/">Main Page</a>
+    </body>
+</html>
