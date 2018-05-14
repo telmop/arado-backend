@@ -1,5 +1,6 @@
 import json
 import math
+import os
 from flask import Flask, request, jsonify, render_template, redirect
 from flask_httpauth import HTTPBasicAuth
 
@@ -22,7 +23,7 @@ DIST_TH = 50  # Threshold of 50 m to see the ad
 app = Flask(__name__)
 auth = HTTPBasicAuth()
 # Add db
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///arado.db3"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///arado.db3")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.app = app
 db.init_app(app)
@@ -33,7 +34,7 @@ def get_ads_location():
     auth = request.headers.get("Authentication")
     if auth is None or not isinstance(auth, str):
         return jsonify({"error": "Invalid authentication"})
-    
+
     token = auth[auth.find("Bearer ")+len("Bearer "):]
     if not valid_key(token):
         return jsonify({"error": "Invalid authentication"})
@@ -51,7 +52,7 @@ def get_ads_location():
                 return jsonify({"error": "Invalid coordinates"})
         else:
             return jsonify({"error": "Invalid coordinates"})
-    
+
     closest = get_closest_ads((latitude, longitude), DIST_TH)
     return jsonify({"ads": closest})
 
